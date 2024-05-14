@@ -34,15 +34,20 @@ pub fn criterion_benchmark(c: &mut Criterion) {
         g.throughput(Throughput::Elements(UNROLL_FACTOR as u64));
         let bitmap = hidden_bitmap();
         let indices = [123, 456, 789, 1011];
-        assert_eq!(indices.len(), UNROLL_FACTOR);
         g.bench_function("bit_naive", |b| {
             b.iter(|| {
                 let [i1, i2, i3, i4] = indices;
+                let [i1, i2, i3, i4] = [
+                    pessimize::hide(i1),
+                    pessimize::hide(i2),
+                    pessimize::hide(i3),
+                    pessimize::hide(i4),
+                ];
                 let [o1, o2, o3, o4] = [
-                    bit_naive(bitmap, pessimize::hide(i1)),
-                    bit_naive(bitmap, pessimize::hide(i2)),
-                    bit_naive(bitmap, pessimize::hide(i3)),
-                    bit_naive(bitmap, pessimize::hide(i4)),
+                    bit_naive(bitmap, i1),
+                    bit_naive(bitmap, i2),
+                    bit_naive(bitmap, i3),
+                    bit_naive(bitmap, i4),
                 ];
                 pessimize::consume(o1);
                 pessimize::consume(o2);
@@ -53,11 +58,17 @@ pub fn criterion_benchmark(c: &mut Criterion) {
         g.bench_function("bit_const_table", |b| {
             b.iter(|| {
                 let [i1, i2, i3, i4] = indices;
+                let [i1, i2, i3, i4] = [
+                    pessimize::hide(i1),
+                    pessimize::hide(i2),
+                    pessimize::hide(i3),
+                    pessimize::hide(i4),
+                ];
                 let [o1, o2, o3, o4] = [
-                    bit_const_table(bitmap, pessimize::hide(i1)),
-                    bit_const_table(bitmap, pessimize::hide(i2)),
-                    bit_const_table(bitmap, pessimize::hide(i3)),
-                    bit_const_table(bitmap, pessimize::hide(i4)),
+                    bit_const_table(bitmap, i1),
+                    bit_const_table(bitmap, i2),
+                    bit_const_table(bitmap, i3),
+                    bit_const_table(bitmap, i4),
                 ];
                 pessimize::consume(o1);
                 pessimize::consume(o2);
@@ -68,11 +79,17 @@ pub fn criterion_benchmark(c: &mut Criterion) {
         g.bench_function("bit_static_table", |b| {
             b.iter(|| {
                 let [i1, i2, i3, i4] = indices;
+                let [i1, i2, i3, i4] = [
+                    pessimize::hide(i1),
+                    pessimize::hide(i2),
+                    pessimize::hide(i3),
+                    pessimize::hide(i4),
+                ];
                 let [o1, o2, o3, o4] = [
-                    bit_static_table(bitmap, pessimize::hide(i1)),
-                    bit_static_table(bitmap, pessimize::hide(i2)),
-                    bit_static_table(bitmap, pessimize::hide(i3)),
-                    bit_static_table(bitmap, pessimize::hide(i4)),
+                    bit_static_table(bitmap, i1),
+                    bit_static_table(bitmap, i2),
+                    bit_static_table(bitmap, i3),
+                    bit_static_table(bitmap, i4),
                 ];
                 pessimize::consume(o1);
                 pessimize::consume(o2);
