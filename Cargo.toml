@@ -1,0 +1,17 @@
+[package]
+name = "bit-test"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+criterion = "0.5.1"
+pessimize = "1.0.0"
+
+[lib]
+bench = false
+
+[[bench]]
+name = "benchmark"
+harness = false
